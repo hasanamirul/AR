@@ -136,7 +136,12 @@ footer {
     display: block;
   }
 
-  video, .chart-section {
+  video  {
     width: 100%;
+  }
+
+  .chart-section {
+    width: 95%;
+    margin: 20px auto;
   }
 }
