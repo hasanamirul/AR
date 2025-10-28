@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Augmented Reality View</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.1.8/aframe/build/aframe-ar.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-<body style="margin:0; overflow:hidden;">
-  <header>
-    <h1>Augmented Reality (Prototype)</h1>
+<body class="ar-body">
+  <header class="ar-header">
+    <h1>🔍 Smart Environment AR View</h1>
   </header>
 
-  <main>
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-entity id="weatherText"
-                  position="0 0.3 0"
-                  text="value: Memuat data lingkungan...; color: #00FFFF; align: center;">
-        </a-entity>
-      </a-marker>
+  <main class="ar-main">
+    <video id="cameraFeed" autoplay playsinline></video>
 
-      <a-entity camera></a-entity>
-    </a-scene>
+    <div class="ar-overlay fade-in">
+      <h3>Data Lingkungan (Live)</h3>
+      <p id="arTemp">🌡️ Suhu: -- °C</p>
+      <p id="arHum">💧 Kelembapan: -- %</p>
+      <p id="arAir">🌫️ Kualitas Udara: -- AQI</p>
+    </div>
+
+    <div class="ar-controls">
+      <button id="switchCamera">🔄 Ganti Kamera</button>
+      <a href="index.html" class="btn-back">⬅️ Kembali</a>
+    </div>
   </main>
 
-  <script src="js/ar.js"></script>
+  <script src="js/camera.js"></script>
 </body>
 </html>
