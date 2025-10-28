@@ -17,6 +17,7 @@ body {
   border-radius: 20px;
   padding: 20px 40px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
 button {
@@ -28,6 +29,8 @@ button {
   margin-top: 15px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s ease;
+  
 }
 
 button:hover {
