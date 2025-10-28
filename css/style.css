@@ -91,7 +91,7 @@ video {
 }
 
 .chart-section {
-  width: 90%;
+  width: 80%;
   max-width: 800px;
   margin: 40px auto;
   background: var(--white);
