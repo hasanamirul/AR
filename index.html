@@ -3,59 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistem Pemantauan Lingkungan - AR Dashboard</title>
+  <title>Smart EnviroMonitor</title>
   <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header class="fade-in">
     <img src="assets/logo.png" alt="Logo" class="logo" />
     <h1>Smart EnviroMonitor</h1>
-    <p>Pemantauan Suhu, Kelembapan, dan Kualitas Udara Real-Time</p>
   </header>
 
-  <div class="mode-buttons fade-in">
-    <button id="realBtn">🌍 Mode Data Nyata</button>
-    <button id="simBtn">⚙️ Mode Simulasi</button>
-  </div>
+  <main>
+    <section class="dashboard fade-in">
+      <div class="card" id="temperature">
+        <img src="assets/icons/temp.svg" alt="Temp Icon">
+        <h2>Suhu</h2>
+        <p><span id="tempValue">--</span> °C</p>
+      </div>
 
-  <section class="container fade-in">
-    <div class="card">
-      <img src="assets/temperature.svg" alt="Suhu" />
-      <h2>Suhu</h2>
-      <p id="temperature">-- °C</p>
-    </div>
+      <div class="card" id="humidity">
+        <img src="assets/icons/humidity.svg" alt="Humidity Icon">
+        <h2>Kelembapan</h2>
+        <p><span id="humidityValue">--</span> %</p>
+      </div>
 
-    <div class="card">
-      <img src="assets/humidity.svg" alt="Kelembapan" />
-      <h2>Kelembapan</h2>
-      <p id="humidity">-- %</p>
-    </div>
+      <div class="card" id="air">
+        <img src="assets/icons/air.svg" alt="Air Icon">
+        <h2>Kualitas Udara</h2>
+        <p><span id="airValue">--</span> AQI</p>
+      </div>
+    </section>
 
-    <div class="card">
-      <img src="assets/air.svg" alt="Kualitas Udara" />
-      <h2>Kualitas Udara (AQI)</h2>
-      <p id="aqi">--</p>
-    </div>
-  </section>
+    <section class="controls fade-in">
+      <button id="fetchData">Ambil Data Nyata 🌍</button>
+      <button id="simulateData">Simulasi Data 🔄</button>
+      <button id="switchCam">🔄 Ganti Kamera</button>
+    </section>
 
-  <section class="chart-section fade-in">
-    <h2>📈 Grafik Perubahan Suhu & AQI</h2>
-    <canvas id="envChart"></canvas>
-  </section>
+    <section class="camera-container fade-in">
+      <video id="cameraFeed" autoplay playsinline></video>
+    </section>
+  </main>
 
-  <section class="camera-section fade-in">
-    <h2>Live Camera + AR Overlay</h2>
-    <video id="camera" autoplay></video>
-    <div id="overlay" class="overlay">
-      <p id="overlayText">Menunggu Data...</p>
-    </div>
-  </section>
-
-  <footer>
-    <p>© 2025 Smart EnviroMonitor | Data dari OpenWeatherMap API</p>
+  <footer class="fade-in">
+    <p>© 2025 Smart EnviroMonitor | Real-Time Environmental Tracking</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
