@@ -2,24 +2,32 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Smart Environment Monitor (IoT + AR)</title>
+  <title>Smart Environment Monitor</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="js/script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/chart.js" defer></script>
+  <script src="js/ai_insight.js" defer></script>
 </head>
 <body>
-  <div class="ui">
+  <header>
     <h1>🌤️ Smart Environment Monitor</h1>
-    <p>Kota: <span id="city">Semarang</span></p>
-    <p>Suhu: <span id="temp">--</span> °C</p>
-    <p>Kualitas Udara: <span id="air">--</span></p>
-    <button id="arButton">Aktifkan Kamera AR</button>
-  </div>
+    <button id="darkModeToggle">🌓</button>
+  </header>
 
-  <a-scene embedded arjs>
-    <a-entity id="sensorModel" position="0 0 0" rotation="0 45 0" scale="0.5 0.5 0.5"
-      gltf-model="assets/model.glb" visible="false">
-    </a-entity>
-  </a-scene>
+  <section class="info">
+    <h2 id="city">Semarang</h2>
+    <p>Suhu: <span id="temp">--</span> °C</p>
+    <p>Kelembapan: <span id="humidity">--</span> %</p>
+    <p>Kualitas Udara: <span id="air">--</span></p>
+    <p><b id="ai-insight">Menganalisis kondisi...</b></p>
+  </section>
+
+  <canvas id="chartCanvas"></canvas>
+
+  <div class="actions">
+    <button id="refreshBtn">🔄 Perbarui</button>
+    <button onclick="location.href='ar.html'">🕶️ Mode AR</button>
+  </div>
 </body>
 </html>
