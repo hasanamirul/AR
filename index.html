@@ -1,58 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart EnviroMonitor - Dashboard Interaktif</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <title>Smart Environment Monitor (IoT + AR)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="js/script.js" defer></script>
 </head>
 <body>
-  <header class="fade-in">
-    <img src="assets/LOGO ANJAY.png" alt="Logo" class="logo" />
-    <h1>Smart EnviroMonitor</h1>
-  </header>
+  <div class="ui">
+    <h1>🌤️ Smart Environment Monitor</h1>
+    <p>Kota: <span id="city">Semarang</span></p>
+    <p>Suhu: <span id="temp">--</span> °C</p>
+    <p>Kualitas Udara: <span id="air">--</span></p>
+    <button id="arButton">Aktifkan Kamera AR</button>
+  </div>
 
-  <main>
-    <section class="dashboard fade-in">
-      <div class="card" id="temperature">
-        <img src="assets/icons/TEMPT.png" alt="Temp Icon">
-        <h2>Suhu</h2>
-        <p><span id="tempValue">--</span> °C</p>
-      </div>
-
-      <div class="card" id="humidity">
-        <img src="assets/icons/HUMI.png" alt="Humidity Icon">
-        <h2>Kelembapan</h2>
-        <p><span id="humidityValue">--</span> %</p>
-      </div>
-
-      <div class="card" id="air">
-        <img src="assets/icons/AQI.png" alt="Air Icon">
-        <h2>Kualitas Udara</h2>
-        <p><span id="airValue">--</span> AQI</p>
-      </div>
-    </section>
-
-    <section class="controls fade-in">
-      <button id="fetchData">🌍 Ambil Data Nyata</button>
-      <button id="simulateData">🔄 Simulasi Data</button>
-      <button id="switchCam">📸 Ganti Kamera</button>
-    </section>
-
-    <section class="camera-container fade-in">
-      <video id="cameraFeed" autoplay playsinline></video>
-    </section>
-
-    <section class="chart-section fade-in">
-      <canvas id="enviroChart"></canvas>
-    </section>
-  </main>
-
-  <footer class="fade-in">
-    <p>© 2025 Smart EnviroMonitor | Real-Time Environmental Tracking</p>
-  </footer>
-
-  <script src="js/script.js"></script>
+  <a-scene embedded arjs>
+    <a-entity id="sensorModel" position="0 0 0" rotation="0 45 0" scale="0.5 0.5 0.5"
+      gltf-model="assets/model.glb" visible="false">
+    </a-entity>
+  </a-scene>
 </body>
 </html>
