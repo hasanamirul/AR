@@ -21,11 +21,10 @@ header {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-header .logo {
+.logo {
   width: 60px;
   height: 60px;
-  vertical-align: middle;
-  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .dashboard {
@@ -43,7 +42,7 @@ header .logo {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   opacity: 0;
-  animation: fadeIn 1s forwards;
+  animation: fadeIn 1.2s forwards;
 }
 
 .card img {
@@ -91,6 +90,16 @@ video {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
+.chart-section {
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto;
+  background: var(--white);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
 footer {
   text-align: center;
   padding: 15px;
@@ -122,12 +131,12 @@ footer {
   }
 
   button {
-    width: 80%;
+    width: 85%;
     margin: 8px auto;
     display: block;
   }
 
-  video {
+  video, .chart-section {
     width: 100%;
   }
 }
