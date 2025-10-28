@@ -1,17 +1,30 @@
-body {
+/* 🌈 RESET & BASE STYLE */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  background-color: #b8f0f0;
-  color: #fff;
 }
 
+body {
+  background: linear-gradient(to bottom right, #e8f6ff, #ffffff);
+  color: #0a3d62;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* 🌟 HEADER */
 header {
-  background: #101820;
-  color: #00ffc3;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
+  background: #00aaff;
+  color: white;
+  padding: 15px 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.8s ease-in-out;
 }
 
 header .logo {
@@ -23,51 +36,149 @@ header .logo {
 header .logo img {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
+  animation: fadeIn 1.2s ease-in-out;
 }
 
-nav button, nav a {
-  background: #00ffc3;
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* 🌊 NAV BUTTONS */
+nav {
+  display: flex;
+  gap: 15px;
+}
+
+nav button,
+nav a {
+  background: white;
+  color: #00aaff;
   border: none;
-  padding: 8px 15px;
-  margin-left: 10px;
-  border-radius: 6px;
-  color: #000;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
   text-decoration: none;
-  font-weight: bold;
 }
 
+nav button:hover,
+nav a:hover {
+  background: #0093dd;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 170, 255, 0.4);
+}
+
+/* 🌤️ CARDS SECTION */
 .cards {
   display: flex;
   justify-content: center;
   gap: 30px;
-  margin: 30px 0;
+  margin: 40px auto;
+  flex-wrap: wrap;
+  animation: fadeInUp 1s ease-in-out;
 }
 
 .card {
-  background: #1c1c1c;
-  padding: 20px;
-  border-radius: 12px;
-  width: 150px;
+  background: white;
+  width: 220px;
+  padding: 25px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 255, 195, 0.3);
+  box-shadow: 0 5px 20px rgba(0, 170, 255, 0.15);
+  transition: all 0.3s ease;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 170, 255, 0.3);
 }
 
 .card img {
   width: 60px;
   margin-bottom: 10px;
+  animation: fadeIn 1.5s ease;
 }
 
+.card h3 {
+  font-size: 1.1rem;
+  color: #0077b6;
+}
+
+.card p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 5px;
+  color: #023e8a;
+}
+
+/* 📊 CHART SECTION */
 .chart {
-  width: 80%;
-  margin: auto;
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 170, 255, 0.15);
+  animation: fadeInUp 1.3s ease-in-out;
 }
 
+/* 🦶 FOOTER */
 footer {
+  margin-top: auto;
   text-align: center;
-  margin-top: 40px;
-  color: #999;
-  background-color: #101820;
-  padding-bottom: 20px;
-  padding-top: 20px;
+  background: #00aaff;
+  color: white;
+  padding: 15px;
+  font-size: 0.9rem;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+/* 🎞️ ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 📱 RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .cards {
+    gap: 15px;
+  }
+
+  .card {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .chart {
+    width: 95%;
+    padding: 15px;
+  }
 }
