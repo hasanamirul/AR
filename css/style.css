@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #b8f0f0;
+  color: #fff;
+}
+
+header {
+  background: #101820;
+  color: #00ffc3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+}
+
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header .logo img {
+  width: 50px;
+  height: 50px;
+}
+
+nav button, nav a {
+  background: #00ffc3;
+  border: none;
+  padding: 8px 15px;
+  margin-left: 10px;
+  border-radius: 6px;
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.card {
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 12px;
+  width: 150px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 255, 195, 0.3);
+}
+
+.card img {
+  width: 60px;
+  margin-bottom: 10px;
+}
+
+.chart {
+  width: 80%;
+  margin: auto;
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: #999;
+  background-color: #101820;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}

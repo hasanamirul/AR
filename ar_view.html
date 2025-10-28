@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Augmented Reality View</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.1.8/aframe/build/aframe-ar.js"></script>
+</head>
+<body style="margin:0; overflow:hidden;">
+  <header>
+    <h1>Augmented Reality (Prototype)</h1>
+  </header>
+
+  <main>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-entity id="weatherText"
+                  position="0 0.3 0"
+                  text="value: Memuat data lingkungan...; color: #00FFFF; align: center;">
+        </a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </main>
+
+  <script src="js/ar.js"></script>
+</body>
+</html>
