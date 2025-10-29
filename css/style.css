@@ -1,101 +1,166 @@
+/* 🌍 Smart Environment Monitor - Style Modern Responsif */
 :root {
-  --primary: #3db2ff;
-  --light: #ffffff;
-  --shadow: rgba(0, 0, 0, 0.1);
+  --primary: #00b4d8;
+  --secondary: #caf0f8;
+  --bg: #f8fcff;
+  --text: #023e8a;
+  --card-bg: #ffffffc9;
+  --shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --radius: 15px;
+  --fade-in: fadeIn 0.8s ease forwards;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  background: var(--light);
-  color: #222;
-  transition: 0.3s;
+  background: linear-gradient(135deg, #caf0f8, #ffffff);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  animation: var(--fade-in);
 }
 
+/* HEADER */
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
   background: var(--primary);
   color: white;
-  box-shadow: 0 4px 6px var(--shadow);
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: var(--shadow);
+  border-radius: 0 0 var(--radius) var(--radius);
+  animation: fadeInDown 1s ease;
 }
 
 header h1 {
-  font-size: 1.4em;
-  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  margin-bottom: 0.3rem;
 }
 
-nav button, nav a {
-  margin-left: 10px;
+header p {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+header button {
   background: white;
-  border: none;
   color: var(--primary);
-  padding: 8px 15px;
-  border-radius: 8px;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius);
+  margin-top: 0.6rem;
   cursor: pointer;
-  transition: 0.3s;
   font-weight: 600;
+  transition: 0.3s ease;
 }
 
-nav button:hover, nav a:hover {
-  background: var(--primary);
-  color: white;
+header button:hover {
+  background: var(--secondary);
   transform: scale(1.05);
 }
 
-.cards {
+/* MAIN */
+main {
+  flex: 1;
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 15px;
-  padding: 20px;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
 }
 
+/* CARD STYLE */
 .card {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  width: 200px;
-  text-align: center;
-  box-shadow: 0 5px 10px var(--shadow);
-  transition: 0.3s;
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  width: 320px;
+  animation: fadeInUp 1s ease;
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px var(--shadow);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.15);
 }
 
-.insight {
-  background: #f1faff;
-  padding: 20px;
+.card h2 {
+  color: var(--primary);
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.card .ai {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--secondary);
+  padding: 0.7rem;
+  border-radius: var(--radius);
   text-align: center;
-  border-radius: 15px;
-  width: 90%;
-  margin: 20px auto;
-  box-shadow: 0 4px 8px var(--shadow);
+  animation: fadeIn 1.2s ease;
 }
 
-.fade-in {
-  animation: fadeIn 1s ease forwards;
-  opacity: 0;
+/* CANVAS CHART */
+canvas {
+  width: 100% !important;
+  height: auto !important;
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--primary);
+  color: white;
+  font-size: 0.9rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  animation: fadeInUp 1s ease;
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  header {
-    flex-direction: column;
-  }
-  .cards {
+  main {
     flex-direction: column;
     align-items: center;
+    padding: 1.2rem;
   }
+
   .card {
-    width: 80%;
+    width: 90%;
   }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

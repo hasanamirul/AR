@@ -3,33 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tampilan AR - Smart Environment</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Augmented Reality View</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
+  <style>
+    body {
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .ar-header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem;
+      z-index: 10;
+      animation: fadeInDown 1s ease;
+    }
+
+    .ar-footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      animation: fadeInUp 1s ease;
+    }
+
+    .ar-footer a {
+      background: white;
+      color: var(--primary);
+      padding: 0.7rem 1.4rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+
+    .ar-footer a:hover {
+      background: var(--secondary);
+      transform: scale(1.05);
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+      .ar-header h1 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="fade-in">
-    <h1>Augmented Reality View</h1>
-  </header>
+  <div class="ar-header">
+    <h1>📸 Augmented Reality Mode</h1>
+    <p>Fokuskan kamera ke marker “Hiro” untuk melihat elemen virtual.</p>
+  </div>
 
-  <main class="fade-in" style="text-align:center; padding:40px;">
-    <button id="startCamera" class="btn">Aktifkan Kamera AR</button>
-    <video id="cameraFeed" autoplay playsinline></video>
-    <p id="statusText">Kamera belum aktif.</p>
-    <a href="index.html" class="btn">⬅️ Kembali ke Dashboard</a>
-  </main>
+  <a-scene embedded arjs>
+    <a-marker preset="hiro">
+      <a-box position="0 0.5 0" material="color: #00b4d8; opacity: 0.8" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+      <a-text value="Smart Environment" position="-0.7 1.2 0" color="#fff" scale="1.5 1.5 1.5"></a-text>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
 
-  <script>
-    document.getElementById("startCamera").addEventListener("click", async () => {
-      const video = document.getElementById("cameraFeed");
-      const status = document.getElementById("statusText");
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        status.textContent = "Kamera aktif ✅";
-      } catch (e) {
-        status.textContent = "Gagal mengaktifkan kamera ❌";
-      }
-    });
-  </script>
+  <div class="ar-footer">
+    <a href="index.html">⬅️ Kembali ke Dashboard</a>
+  </div>
 </body>
 </html>
