@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Augmented Reality View</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tampilan AR - Smart Environment</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="ar-body">
-  <header class="ar-header">
-    <h1>🔍 Smart Environment AR View</h1>
+<body>
+  <header class="fade-in">
+    <h1>Augmented Reality View</h1>
   </header>
 
-  <main class="ar-main">
+  <main class="fade-in" style="text-align:center; padding:40px;">
+    <button id="startCamera" class="btn">Aktifkan Kamera AR</button>
     <video id="cameraFeed" autoplay playsinline></video>
-
-    <div class="ar-overlay fade-in">
-      <h3>Data Lingkungan (Live)</h3>
-      <p id="arTemp">🌡️ Suhu: -- °C</p>
-      <p id="arHum">💧 Kelembapan: -- %</p>
-      <p id="arAir">🌫️ Kualitas Udara: -- AQI</p>
-    </div>
-
-    <div class="ar-controls">
-      <button id="switchCamera">🔄 Ganti Kamera</button>
-      <a href="index.html" class="btn-back">⬅️ Kembali</a>
-    </div>
+    <p id="statusText">Kamera belum aktif.</p>
+    <a href="index.html" class="btn">⬅️ Kembali ke Dashboard</a>
   </main>
 
-  <script src="js/camera.js"></script>
+  <script>
+    document.getElementById("startCamera").addEventListener("click", async () => {
+      const video = document.getElementById("cameraFeed");
+      const status = document.getElementById("statusText");
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        status.textContent = "Kamera aktif ✅";
+      } catch (e) {
+        status.textContent = "Gagal mengaktifkan kamera ❌";
+      }
+    });
+  </script>
 </body>
 </html>

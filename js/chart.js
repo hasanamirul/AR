@@ -1,26 +1,27 @@
-const ctx = document.getElementById("chartCanvas").getContext("2d");
-let chartData = {
-  labels: [],
-  datasets: [{
-    label: "Suhu (°C)",
-    data: [],
-    borderWidth: 2
-  }]
-};
+let envChart;
 
-export const envChart = new Chart(ctx, {
-  type: "line",
-  data: chartData,
-  options: {
-    scales: {
-      y: { beginAtZero: true }
+function updateChart(temp, humidity) {
+  const ctx = document.getElementById('chartCanvas').getContext('2d');
+  if (envChart) envChart.destroy();
+
+  envChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Suhu (°C)', 'Kelembapan (%)'],
+      datasets: [{
+        label: 'Kondisi Lingkungan',
+        data: [temp, humidity],
+        backgroundColor: ['#00b4d8', '#90e0ef'],
+        borderRadius: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100 },
+        x: { grid: { display: false } }
+      }
     }
-  }
-});
-
-export function updateChart(temp) {
-  const now = new Date().toLocaleTimeString();
-  chartData.labels.push(now);
-  chartData.datasets[0].data.push(temp);
-  envChart.update();
+  });
 }

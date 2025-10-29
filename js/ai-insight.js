@@ -1,11 +1,19 @@
-export function getAIInsight(temp, air, humidity) {
-  if (air === "Buruk" && temp > 32) {
-    return "⚠️ Udara panas dan tidak sehat. Disarankan menutup jendela dan menyalakan ventilasi.";
-  } else if (humidity < 40) {
-    return "💧 Udara kering. Disarankan menggunakan humidifier.";
+function getAIInsight(temp, humidity, air) {
+  const beep = document.getElementById("alertSound");
+  let msg = "";
+
+  if (temp > 32) {
+    msg = "⚠️ Suhu tinggi! Hindari aktivitas berat di luar ruangan.";
+    beep.play();
   } else if (temp < 20) {
-    return "🧥 Cuaca dingin, gunakan pakaian hangat.";
+    msg = "🌡️ Cuaca dingin, jaga suhu tubuhmu.";
+  } else if (air.includes("hujan")) {
+    msg = "☔ Hujan terdeteksi, bawa payung ya!";
+  } else if (humidity > 80) {
+    msg = "💧 Kelembapan tinggi, jaga ventilasi ruangan.";
   } else {
-    return "✅ Kondisi lingkungan normal dan nyaman.";
+    msg = "✅ Lingkungan dalam kondisi ideal dan nyaman.";
   }
+
+  return msg;
 }

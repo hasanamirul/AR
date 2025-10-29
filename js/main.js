@@ -1,50 +1,52 @@
-import { getAIInsight } from './ai_insight.js';
-import { updateChart } from './chart.js';
+let chart;
+let chartData = [];
+let timeLabels = [];
 
-const API_KEY = "MASUKKAN_API_KEY_MU";
-const CITY = "Semarang";
-const tempEl = document.getElementById("temp");
-const airEl = document.getElementById("air");
-const humidityEl = document.getElementById("humidity");
-const insightEl = document.getElementById("ai-insight");
-const beep = new Audio("assets/sound/beep.mp3");
-
-async function getWeather() {
-  const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}&units=metric`);
-  const data = await response.json();
-  return {
-    temp: data.main.temp,
-    humidity: data.main.humidity
-  };
+function initChart() {
+  const ctx = document.getElementById('chartCanvas').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: timeLabels,
+      datasets: [{
+        label: 'Suhu (°C)',
+        data: chartData,
+        borderColor: '#3db2ff',
+        backgroundColor: 'rgba(61,178,255,0.2)',
+        tension: 0.3
+      }]
+    },
+    options: { responsive: true }
+  });
 }
 
-async function getLocalIoT() {
-  try {
-    const res = await fetch("http://192.168.0.10/data.json"); // data dari NodeMCU
-    return await res.json();
-  } catch {
-    return null;
-  }
+function updateChart(temp) {
+  const time = new Date().toLocaleTimeString();
+  if (timeLabels.length > 15) { timeLabels.shift(); chartData.shift(); }
+  timeLabels.push(time);
+  chartData.push(temp);
+  chart.update();
 }
 
-async function refreshData() {
-  const weather = await getWeather();
-  const local = await getLocalIoT();
+function updateAIInsight(temp, hum, air) {
+  let msg = "";
+  if (temp > 30) msg += "🌡️ Suhu cukup tinggi. Minum air yang cukup. ";
+  else if (temp < 20) msg += "🧥 Cuaca dingin, jaga kesehatan.";
+  else msg += "✅ Suhu normal.";
 
-  const temp = local?.temp || weather.temp;
-  const humidity = local?.humidity || weather.humidity;
-  const airQuality = temp > 33 ? "Buruk" : "Baik";
+  if (hum > 80) msg += " Udara terasa lembap.";
+  else if (hum < 40) msg += " Udara kering, waspadai dehidrasi.";
 
-  tempEl.textContent = temp.toFixed(1);
-  humidityEl.textContent = humidity.toFixed(0);
-  airEl.textContent = airQuality;
+  if (air > 1010) msg += " 🚫 Kualitas udara kurang baik.";
+  else msg += " 🌤️ Kualitas udara cukup baik.";
 
-  if (airQuality === "Buruk") beep.play();
-
-  updateChart(temp);
-  insightEl.textContent = getAIInsight(temp, airQuality, humidity);
+  document.getElementById("aiInsight").innerText = msg;
 }
 
-document.getElementById("refreshBtn").addEventListener("click", refreshData);
-refreshData();
-setInterval(refreshData, 10000);
+document.addEventListener("DOMContentLoaded", () => {
+  initChart();
+  document.getElementById("btnSimulasi").addEventListener("click", () => {
+    updateAIInsight(28, 60, 1000);
+  });
+  document.getElementById("btnReal").addEventListener("click", getWeatherData);
+});

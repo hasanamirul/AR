@@ -1,36 +1,101 @@
+:root {
+  --primary: #3db2ff;
+  --light: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
 body {
-  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #e0f7ff, #ffffff);
-  color: #003366;
-  text-align: center;
-  height: 100vh;
-  overflow: hidden;
+  margin: 0;
+  background: var(--light);
+  color: #222;
+  transition: 0.3s;
 }
 
-.ui {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 20px;
-  padding: 20px 40px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-button {
-  background-color: #007BFF;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: var(--primary);
   color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 10px 20px;
-  margin-top: 15px;
-  cursor: pointer;
-  font-size: 16px;
+  box-shadow: 0 4px 6px var(--shadow);
 }
 
-button:hover {
-  background-color: #0056b3;
+header h1 {
+  font-size: 1.4em;
+  margin: 0;
+}
+
+nav button, nav a {
+  margin-left: 10px;
+  background: white;
+  border: none;
+  color: var(--primary);
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+nav button:hover, nav a:hover {
+  background: var(--primary);
+  color: white;
+  transform: scale(1.05);
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 5px 10px var(--shadow);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow);
+}
+
+.insight {
+  background: #f1faff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 15px;
+  width: 90%;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+  }
+  .cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    width: 80%;
+  }
 }
