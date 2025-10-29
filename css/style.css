@@ -151,3 +151,7 @@ footer {
     width: 95%;
   }
 }
+
+model-viewer {
+  display: none; /* Disembunyikan sampai scan selesai */
+}

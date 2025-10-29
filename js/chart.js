@@ -1,5 +1,3 @@
-let sensorChart;
-
 function renderChart(data) {
   const ctx = document.getElementById("sensorChart").getContext("2d");
   new Chart(ctx, {
@@ -23,4 +21,3 @@ function renderChart(data) {
     }
   });
 }
-
