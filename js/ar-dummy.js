@@ -28,30 +28,42 @@ document.getElementById("btnCamera").addEventListener("click", async () => {
     dummy.style.display = "none";
 
     // Ukuran random
-    const size = 60 + Math.random() * 90; // 60-150px
-    dummy.style.width = size + "px";
-    dummy.style.height = size + "px";
+    const size = 60 + Math.random()*90;
+    dummy.style.width = size+"px";
+    dummy.style.height = size+"px";
 
     // Posisi random
-    const left = 10 + Math.random() * 80; // 10%-90%
-    const top = 10 + Math.random() * 80;  // 10%-90%
-    dummy.style.left = left + "%";
-    dummy.style.top = top + "%";
+    const left = 10 + Math.random()*80;
+    const top = 10 + Math.random()*80;
+    dummy.style.left = left+"%";
+    dummy.style.top = top+"%";
 
     // Animasi duration random
-    dummy.style.animationDuration = `${4+Math.random()*4}s, ${3+Math.random()*3}s, ${4+Math.random()*3}s`;
+    dummy.style.animationDuration = `${4+Math.random()*4}s, ${3+Math.random()*3}s, ${4+Math.random()*3}s, ${5+Math.random()*4}s`;
   }
 
   // Scan 3 detik
-  setTimeout(() => {
-    dummyObjects.forEach(dummy => {
-      dummy.style.display = "block";
-
-      // Warna sesuai AQI random
+  setTimeout(()=>{
+    dummyObjects.forEach(dummy=>{
+      dummy.style.display="block";
       const aqi = Math.floor(Math.random()*150);
-      if(aqi <=50) dummy.style.background = "radial-gradient(circle,#00ff00,#007800)";
-      else if(aqi <=100) dummy.style.background = "radial-gradient(circle,#ffff00,#ffaa00)";
-      else dummy.style.background = "radial-gradient(circle,#ff0000,#770000)";
+      if(aqi<=50) dummy.style.background="radial-gradient(circle,#00ff00,#007800)";
+      else if(aqi<=100) dummy.style.background="radial-gradient(circle,#ffff00,#ffaa00)";
+      else dummy.style.background="radial-gradient(circle,#ff0000,#770000)";
     });
-  }, 3000);
+  },3000);
+
+  // Device orientation → sway posisi objek
+  if(window.DeviceOrientationEvent){
+    window.addEventListener("deviceorientation",(event)=>{
+      const gamma = event.gamma || 0; // tilt kiri/kanan
+      const beta = event.beta || 0; // tilt depan/belakang
+
+      dummyObjects.forEach(dummy=>{
+        const left = parseFloat(dummy.style.left);
+        const top = parseFloat(dummy.style.top);
+        dummy.style.transform = `translate(-50%,-50%) translateX(${gamma/3}px) translateY(${beta/4}px)`;
+      });
+    });
+  }
 });
