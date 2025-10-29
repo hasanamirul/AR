@@ -74,6 +74,25 @@ main {
   font-size: 0.95rem; color:#aee0ff;
 }
 
+/* Dummy AR objects */
+.dummy-3d {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #3db2ff, #0078d7);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  animation: rotateDummy 6s linear infinite, floatDummy 4s ease-in-out infinite alternate;
+  display: none;
+  pointer-events: none;
+}
+
+/* Float effect untuk membuat objek naik-turun */
+@keyframes floatDummy {
+  0% { transform: translate(-50%, -50%) translateY(0px); }
+  50% { transform: translate(-50%, -50%) translateY(-15px); }
+  100% { transform: translate(-50%, -50%) translateY(0px); }
+}
+
+
 .hidden { display:none; }
 
 /* Animations */

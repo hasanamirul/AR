@@ -35,3 +35,56 @@ document.getElementById("btnCamera").addEventListener("click", async () => {
 
   }, 3000);
 });
+
+document.getElementById("btnCamera").addEventListener("click", async () => {
+  const arSection = document.getElementById("ar-section");
+  arSection.classList.remove("hidden");
+
+  const videoContainer = document.getElementById("camera-container");
+  videoContainer.innerHTML = '';
+  const video = document.createElement("video");
+  video.autoplay = true;
+  video.playsInline = true;
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  videoContainer.appendChild(video);
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    video.srcObject = stream;
+  } catch (err) {
+    alert("Gagal mengakses kamera: " + err);
+    return;
+  }
+
+  const dummyObjects = [
+    document.getElementById("dummy1"),
+    document.getElementById("dummy2"),
+    document.getElementById("dummy3")
+  ];
+
+  dummyObjects.forEach((dummy, index) => {
+    dummy.style.display = "none";
+
+    // Posisi random dalam AR Section
+    const left = 20 + Math.random() * 60; // 20% - 80%
+    const top = 20 + Math.random() * 60;  // 20% - 80%
+    dummy.style.left = left + "%";
+    dummy.style.top = top + "%";
+  });
+
+  // Animasi scan 3 detik → kemudian dummy muncul
+  setTimeout(() => {
+    dummyObjects.forEach(dummy => {
+      dummy.style.display = "block";
+
+      // Simulasi warna dummy sesuai AQI (random)
+      const aqi = Math.floor(Math.random() * 150);
+      if (aqi <= 50) dummy.style.background = "radial-gradient(circle,#00ff00,#007800)";
+      else if (aqi <= 100) dummy.style.background = "radial-gradient(circle,#ffff00,#ffaa00)";
+      else dummy.style.background = "radial-gradient(circle,#ff0000,#770000)";
+    });
+  }, 3000);
+});
+
