@@ -1,0 +1,13 @@
+# Blender 4.3.0 MTL File: 'weather-icon-002.blend'
+# www.blender.org
+
+newmtl weather-icon-002
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Ns textures/weather-icon-002-roughness-metalness-4k.png
+map_Bump -bm 1.000000 textures/weather-icon-002-nrm-metalness-4k.png

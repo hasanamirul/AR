@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Environment Monitor</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/OBJLoader.js"></script>
 </head>
+
 <body>
   <header>
     <h1>🌤️ Smart Environment Monitor</h1>
@@ -37,23 +41,23 @@
     </div>
   </main>
 
-<section id="ar-section" class="hidden">
-  <div id="camera-container"></div>
+  <section id="ar-section" class="hidden">
+    <div id="camera-container"></div>
 
-  <!-- Dummy AR objects -->
-  <div class="dummy-3d" id="dummy1" data-sensor="temp:28°C, AQI:70"></div>
-  <div class="dummy-3d" id="dummy2" data-sensor="temp:29°C, AQI:65"></div>
-  <div class="dummy-3d" id="dummy3" data-sensor="temp:30°C, AQI:80"></div>
-  <div class="dummy-3d" id="dummy4" data-sensor="temp:27°C, AQI:50"></div>
-  <div class="dummy-3d" id="dummy5" data-sensor="temp:26°C, AQI:40"></div>
-  <div class="dummy-3d" id="dummy6" data-sensor="temp:31°C, AQI:90"></div>
+    <!-- Dummy AR objects -->
+    <div class="dummy-3d" id="dummy1" data-sensor="temp:28°C, AQI:70"></div>
+    <div class="dummy-3d" id="dummy2" data-sensor="temp:29°C, AQI:65"></div>
+    <div class="dummy-3d" id="dummy3" data-sensor="temp:30°C, AQI:80"></div>
+    <div class="dummy-3d" id="dummy4" data-sensor="temp:27°C, AQI:50"></div>
+    <div class="dummy-3d" id="dummy5" data-sensor="temp:26°C, AQI:40"></div>
+    <div class="dummy-3d" id="dummy6" data-sensor="temp:31°C, AQI:90"></div>
 
-  <div class="scan-line"></div>
-  <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
-</section>
+    <div class="scan-line"></div>
+    <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
+  </section>
 
-<!-- Tooltip info -->
-<div id="dummy-tooltip" class="hidden"></div>
+  <!-- Tooltip info -->
+  <div id="dummy-tooltip" class="hidden"></div>
 
 
 
@@ -70,4 +74,5 @@
   <script src="js/ar-dummy.js"></script>
   <script src="js/script.js"></script>
 </body>
+
 </html>
