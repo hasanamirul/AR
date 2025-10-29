@@ -1,77 +1,47 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Augmented Reality View</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
-  <style>
-    body {
-      overflow: hidden;
-      background: var(--bg);
-    }
-    .ar-header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      text-align: center;
-      background: var(--primary);
-      color: white;
-      padding: 0.8rem;
-      z-index: 10;
-      animation: fadeInDown 1s ease;
-    }
-
-    .ar-footer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      z-index: 10;
-      animation: fadeInUp 1s ease;
-    }
-
-    .ar-footer a {
-      background: white;
-      color: var(--primary);
-      padding: 0.7rem 1.4rem;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 600;
-      transition: 0.3s ease;
-    }
-
-    .ar-footer a:hover {
-      background: var(--secondary);
-      transform: scale(1.05);
-    }
-
-    /* Responsif */
-    @media (max-width: 768px) {
-      .ar-header h1 {
-        font-size: 1.2rem;
-      }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Environment Monitor</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="ar-header">
-    <h1>📸 Augmented Reality Mode</h1>
-    <p>Fokuskan kamera ke marker “Hiro” untuk melihat elemen virtual.</p>
-  </div>
+  <header>
+    <h1>🌤️ Smart Environment Monitor</h1>
+    <button id="btnCamera">Aktifkan Kamera AR</button>
+  </header>
 
-  <a-scene embedded arjs>
-    <a-marker preset="hiro">
-      <a-box position="0 0.5 0" material="color: #00b4d8; opacity: 0.8" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-      <a-text value="Smart Environment" position="-0.7 1.2 0" color="#fff" scale="1.5 1.5 1.5"></a-text>
-    </a-marker>
-    <a-entity camera></a-entity>
-  </a-scene>
+  <main>
+    <div class="card" id="weather-card">
+      <h2>🌡️ Cuaca</h2>
+      <p id="temp">Mendeteksi...</p>
+      <p id="condition">Loading...</p>
+    </div>
 
-  <div class="ar-footer">
-    <a href="index.html">⬅️ Kembali ke Dashboard</a>
-  </div>
+    <div class="card" id="sensor-card">
+      <h2>🌫️ Sensor Lingkungan</h2>
+      <p id="air-quality">Mendeteksi...</p>
+      <div id="chartContainer" class="chart-container">
+        <canvas id="sensorChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card" id="ai-card">
+      <h2>🤖 Insight AI</h2>
+      <p id="ai-insight">Analisis otomatis akan muncul di sini...</p>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="api.js"></script>
+  <script src="chart.js"></script>
+  <script src="ai-insight.js"></script>
+  <script src="camera.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
