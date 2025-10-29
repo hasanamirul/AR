@@ -2,63 +2,61 @@ document.getElementById("btnCamera").addEventListener("click", async () => {
   const arSection = document.getElementById("ar-section");
   arSection.classList.remove("hidden");
 
-  // Camera setup
+  // Kamera live
   const videoContainer = document.getElementById("camera-container");
   videoContainer.innerHTML = '';
   const video = document.createElement("video");
   video.autoplay = true;
   video.playsInline = true;
-  video.style.width = "100%";
-  video.style.height = "100%";
-  video.style.objectFit = "cover";
   videoContainer.appendChild(video);
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
     video.srcObject = stream;
-  } catch (err) {
-    alert("Gagal mengakses kamera: " + err);
+  } catch(err) {
+    alert("Gagal akses kamera: "+err);
     return;
   }
 
-  // Dummy objects
-  const dummyObjects = [];
-  for(let i=1;i<=6;i++){
-    const dummy = document.getElementById(`dummy${i}`);
-    dummyObjects.push(dummy);
+  // Setup Three.js
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, videoContainer.clientWidth/videoContainer.clientHeight, 0.1, 1000);
+  camera.position.z = 2;
 
-    // Random initial position
-    dummy.style.left = `${10 + Math.random()*80}%`;
-    dummy.style.top = `${10 + Math.random()*80}%`;
-  }
+  const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:true });
+  renderer.setSize(videoContainer.clientWidth, videoContainer.clientHeight);
+  renderer.domElement.style.position = "absolute";
+  renderer.domElement.style.top = 0;
+  renderer.domElement.style.left = 0;
+  videoContainer.appendChild(renderer.domElement);
 
-  // Show dummy after scan animation
-  setTimeout(()=>{
-    dummyObjects.forEach(d => d.style.display="block");
-  },3000);
+  // Lampu
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.position.set(1,1,1);
+  scene.add(dirLight);
+  scene.add(new THREE.AmbientLight(0xffffff,0.5));
 
-  // Device orientation sway
-  if(window.DeviceOrientationEvent){
-    window.addEventListener("deviceorientation",(e)=>{
-      const gamma = e.gamma || 0;
-      const beta = e.beta || 0;
-      dummyObjects.forEach(d=>{
-        d.style.transform = `translate(-50%,-50%) translateX(${gamma/3}px) translateY(${beta/4}px)`;
-      });
-    });
-  }
+  // Load OBJ
+  const loader = new THREE.OBJLoader();
+  loader.load('assets/models/cloud.obj', (obj)=>{
+    obj.scale.set(0.5,0.5,0.5);
+    obj.position.set(0,0,0);
+    scene.add(obj);
 
-  // Tooltip on click
-  const tooltip = document.getElementById("dummy-tooltip");
-  dummyObjects.forEach(d => {
-    d.addEventListener("click",(e)=>{
-      tooltip.innerText = d.getAttribute("data-sensor");
-      tooltip.style.left = e.clientX + "px";
-      tooltip.style.top = e.clientY - 40 + "px";
-      tooltip.classList.remove("hidden");
-      setTimeout(()=>tooltip.classList.add("hidden"),3000);
-    });
+    // Animasi rotate + float
+    function animate(){
+      requestAnimationFrame(animate);
+      obj.rotation.y += 0.01;
+      obj.position.y = 0.2 * Math.sin(Date.now()*0.002);
+      renderer.render(scene,camera);
+    }
+    animate();
   });
 
-  // Floating + rotate animations handled via CSS keyframes
+  // Resize responsive
+  window.addEventListener("resize", ()=>{
+    camera.aspect = videoContainer.clientWidth/videoContainer.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(videoContainer.clientWidth, videoContainer.clientHeight);
+  });
 });
