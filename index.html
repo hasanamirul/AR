@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Environment Monitor</title>
   <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
   <header>
@@ -39,33 +37,23 @@
     </div>
   </main>
 
-  <!-- AREA AR VIEW -->
+  <!-- AR Section -->
   <section id="ar-section" class="hidden">
-    <div id="scanner">
-      <div class="scan-line"></div>
-      <p>🔍 Memindai lingkungan sekitar...</p>
-    </div>
-
-    <model-viewer 
-      src="assets/flower-model/flowe/__init__.py" 
-      alt="Globe 3D"
-      auto-rotate
-      camera-controls
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      style="width: 250px; height: 250px; margin:auto; display:none;">
-    </model-viewer>
+    <div id="camera-container"></div>
+    <div class="dummy-3d"></div>
+    <div class="scan-line"></div>
+    <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
   </section>
 
   <footer>
     © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
   </footer>
 
-  <!-- Script -->
+  <!-- Scripts -->
   <script src="js/api.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/ai-insight.js"></script>
-  <script src="js/camera.js"></script>
+  <script src="js/ar-dummy.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>
