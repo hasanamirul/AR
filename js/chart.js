@@ -1,24 +1,26 @@
 let sensorChart;
 
-function renderChart(sensorData) {
+function renderChart(data) {
   const ctx = document.getElementById("sensorChart").getContext("2d");
-  if (sensorChart) sensorChart.destroy();
-
-  sensorChart = new Chart(ctx, {
+  new Chart(ctx, {
     type: "line",
     data: {
-      labels: ["CO₂", "PM2.5", "PM10", "VOC", "O₃"],
+      labels: ["09:00", "10:00", "11:00", "12:00", "13:00"],
       datasets: [{
-        label: "Kualitas Udara",
-        data: sensorData,
-        borderColor: "#0078d7",
-        tension: 0.3,
-        fill: false
+        label: "Kelembapan & Kualitas Udara",
+        data: data,
+        borderColor: "#00aaff",
+        backgroundColor: "rgba(0, 170, 255, 0.2)",
+        fill: true,
+        tension: 0.4
       }]
     },
     options: {
       responsive: true,
-      scales: { y: { beginAtZero: true } }
+      scales: {
+        y: { beginAtZero: true }
+      }
     }
   });
 }
+

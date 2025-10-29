@@ -1,5 +1,6 @@
-function getAIInsight(temp, airQuality) {
-  if (temp > 30) return "🌞 Suhu cukup tinggi hari ini. Tetap terhidrasi dan hindari aktivitas berat di luar ruangan.";
-  if (airQuality > 100) return "🌫️ Kualitas udara kurang baik. Disarankan memakai masker jika keluar rumah.";
-  return "🌿 Kondisi lingkungan stabil. Nikmati hari Anda!";
+function getAIInsight(suhu, aqi) {
+  if (suhu > 30 && aqi > 100) return "⚠️ Hati-hati, kondisi lingkungan kurang sehat!";
+  if (suhu > 30) return "🔥 Suhu tinggi, tetap terhidrasi.";
+  if (aqi > 100) return "🌫️ Kualitas udara buruk, gunakan masker.";
+  return "✅ Lingkungan aman dan nyaman.";
 }
