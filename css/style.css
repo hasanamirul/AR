@@ -1,54 +1,39 @@
-/* 🌿 SMART ENVIRONMENT MONITOR STYLE.CSS FINAL */
-/* Global Reset */
-* {
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(180deg, #eaf4ff, #ffffff);
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-
-/* Body */
-body {
-  background: linear-gradient(180deg, #eaf4ff, #ffffff);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-x: hidden;
   color: #222;
-  transition: background 0.4s ease-in-out;
+  overflow-x: hidden;
 }
 
-/* Header */
 header {
-  width: 100%;
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 5%;
   position: sticky;
   top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 5%;
-  animation: slideDown 0.6s ease;
+  z-index: 10;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: #0078d7;
-  font-weight: 700;
+  animation: fadeIn 0.7s ease;
 }
 
 header button {
   background: #0078d7;
-  border: none;
   color: white;
+  border: none;
   padding: 10px 18px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 header button:hover {
@@ -56,109 +41,85 @@ header button:hover {
   transform: scale(1.05);
 }
 
-/* Main Container */
 main {
-  width: 100%;
-  max-width: 1200px;
-  padding: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  animation: fadeIn 0.7s ease;
+  padding: 20px;
 }
 
-/* Card Base */
 .card {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  flex: 1 1 350px;
-  max-width: 380px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 350px;
+  flex: 1 1 300px;
   text-align: center;
-  transition: all 0.4s ease;
-  opacity: 0;
   animation: fadeUp 0.8s ease forwards;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
 }
 
-/* Weather & Sensor Cards */
-.card h2 {
-  font-size: 1.2rem;
-  color: #0078d7;
-  margin-bottom: 12px;
-}
-
-.card p {
-  font-size: 1rem;
-  color: #333;
-}
-
-/* Chart Container */
 .chart-container {
   width: 100%;
-  height: 250px;
+  height: 200px;
+}
+
+#ar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #000;
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px;
   position: relative;
 }
 
-/* AI Insight Box */
-#ai-insight {
-  background: rgba(0, 120, 215, 0.07);
-  border-left: 4px solid #0078d7;
-  padding: 15px;
+.hidden {
+  display: none;
+}
+
+/* Animasi Scan */
+#scanner {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  border: 2px solid #00aaff;
   border-radius: 12px;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #004b8e;
-  margin-top: 10px;
-  animation: fadeIn 1.2s ease;
+  margin-bottom: 15px;
+  overflow: hidden;
 }
 
-/* Footer */
-footer {
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #00aaff, transparent);
+  animation: scanMove 2s linear infinite;
+}
+
+@keyframes scanMove {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+#scanner p {
   text-align: center;
-  padding: 15px;
-  font-size: 0.85rem;
-  color: #555;
-  margin-top: auto;
+  font-size: 0.9rem;
+  color: #aee0ff;
+  margin-top: 10px;
 }
 
-/* Responsive - Mobile */
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  header h1 {
-    font-size: 1.4rem;
-  }
-
-  main {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card {
-    width: 90%;
-  }
-}
-
-/* Responsive - Desktop */
-@media (min-width: 1024px) {
-  main {
-    justify-content: space-around;
-  }
-}
-
-/* Animations */
-@keyframes slideDown {
-  from { transform: translateY(-20px); opacity: 0; }
+/* Animasi dasar */
+@keyframes fadeUp {
+  from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
@@ -167,28 +128,26 @@ footer {
   to { opacity: 1; }
 }
 
-@keyframes fadeUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+footer {
+  text-align: center;
+  padding: 15px;
+  color: #555;
+  font-size: 0.85rem;
 }
 
-/* Loading shimmer for cards */
-.loading {
-  position: relative;
-  overflow: hidden;
-  background: #f6f7f8;
-}
+/* Responsif */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 8px;
+  }
 
-.loading::after {
-  content: "";
-  position: absolute;
-  top: 0; left: -150px;
-  width: 100px; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-  animation: shimmer 1.5s infinite;
-}
+  main {
+    flex-direction: column;
+    align-items: center;
+  }
 
-@keyframes shimmer {
-  0% { left: -150px; }
-  100% { left: 100%; }
+  #ar-section {
+    width: 95%;
+  }
 }

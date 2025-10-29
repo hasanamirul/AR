@@ -2,55 +2,68 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Smart Environment Monitor</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="manifest" href="manifest.json">
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
-
 <body>
   <header>
-    <h1>🌍 Smart Environment Monitor</h1>
-    <p>Kota: <span id="city">Semarang</span></p>
-    <button id="startAR">📷 Aktifkan Kamera AR</button>
+    <h1>🌤️ Smart Environment Monitor</h1>
+    <button id="btnCamera">Aktifkan Kamera AR</button>
   </header>
 
   <main>
-    <section class="card">
-      <h2>🌤️ Data Cuaca</h2>
-      <p><strong>Suhu:</strong> <span id="temp">-</span> °C</p>
-      <p><strong>Kelembapan:</strong> <span id="humidity">-</span>%</p>
-      <p><strong>Kualitas Udara:</strong> <span id="air">-</span></p>
-      <p id="insight" class="ai"></p>
-    </section>
+    <!-- Tampilan Cuaca -->
+    <div class="card" id="weather-card">
+      <h2>🌡️ Cuaca Saat Ini</h2>
+      <p id="lokasi">Kota Semarang</p>
+      <p id="suhu">Memuat suhu...</p>
+      <p id="kondisi">Mendeteksi kondisi...</p>
+    </div>
 
-    <section class="card">
-      <canvas id="chartCanvas" width="400" height="200"></canvas>
-    </section>
+    <!-- Sensor Lingkungan -->
+    <div class="card" id="sensor-card">
+      <h2>🌫️ Kualitas Udara</h2>
+      <p id="aqi">Mengukur kualitas udara...</p>
+      <div class="chart-container">
+        <canvas id="sensorChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Insight AI -->
+    <div class="card" id="ai-card">
+      <h2>🤖 Insight AI</h2>
+      <p id="ai-insight">Menunggu data sensor...</p>
+    </div>
   </main>
 
-  <section id="ar-section" style="display:none;">
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-image src="assets/logo-marker.png" rotation="-90 0 0" height="1.5" width="1.5"></a-image>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
+  <!-- AREA AR VIEW -->
+  <section id="ar-section" class="hidden">
+    <div id="scanner">
+      <div class="scan-line"></div>
+      <p>🔍 Memindai lingkungan sekitar...</p>
+    </div>
+    <model-viewer 
+      src="assets/globe.glb" 
+      alt="Globe 3D"
+      auto-rotate
+      camera-controls
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      style="width: 250px; height: 250px; margin:auto;">
+    </model-viewer>
   </section>
 
-  <audio id="alertSound" src="assets/sound/alert.mp3" preload="auto"></audio>
-
   <footer>
-    <p>© 2025 Smart Environment Monitor | Universitas Wahid Hasyim</p>
+    © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
   </footer>
 
-  <!-- Modular scripts -->
+  <!-- Script -->
   <script src="js/api.js"></script>
-  <script src="js/ai-insight.js"></script>
   <script src="js/chart.js"></script>
+  <script src="js/ai-insight.js"></script>
   <script src="js/camera.js"></script>
   <script src="js/script.js"></script>
 </body>

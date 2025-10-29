@@ -1,18 +1,24 @@
-async function init() {
-  const weather = await fetchWeather();
-  document.getElementById("temp").innerText = weather.temp;
-  document.getElementById("humidity").innerText = weather.humidity;
-  document.getElementById("air").innerText = weather.air;
+(async function () {
+  const weatherData = await getWeatherData();
 
-  const insight = getAIInsight(weather.temp, weather.humidity, weather.air);
-  document.getElementById("insight").innerText = insight;
+  const suhu = weatherData.main.temp;
+  const kondisi = weatherData.weather[0].description;
+  const kualitasUdara = Math.floor(Math.random() * 150); // simulasi sensor
 
-  updateChart(weather.temp, weather.humidity);
-}
+  document.getElementById("suhu").innerText = `Suhu: ${suhu.toFixed(1)}°C`;
+  document.getElementById("kondisi").innerText = `Kondisi: ${kondisi}`;
+  document.getElementById("aqi").innerText = `Indeks Kualitas Udara: ${kualitasUdara}`;
 
-window.addEventListener("load", () => {
-  init();
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+  // Chart
+  renderChart([90, 70, 60, 80, 100]);
+
+  // Insight AI
+  const insight = getAIInsight(suhu, kualitasUdara);
+  document.getElementById("ai-insight").innerText = insight;
+
+  // Audio jika kondisi buruk
+  if (suhu > 30 || kualitasUdara > 100) {
+    const beep = new Audio("assets/beep.mp3");
+    beep.play();
   }
-});
+})();

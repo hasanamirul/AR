@@ -1,12 +1,8 @@
-const apiKey = "d629ed8416f6ccdf4075a3407a5970fd";
-const defaultCity = "Semarang";
+const API_KEY = "d629ed8416f6ccdf4075a3407a5970fd";
+const city = "Semarang";
 
-async function fetchWeather(city = defaultCity) {
-  const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=id&appid=${apiKey}`);
+async function getWeatherData() {
+  const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=id`);
   const data = await res.json();
-  return {
-    temp: data.main.temp.toFixed(1),
-    humidity: data.main.humidity,
-    air: data.weather[0].description
-  };
+  return data;
 }

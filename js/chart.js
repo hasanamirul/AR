@@ -1,27 +1,24 @@
-let envChart;
+let sensorChart;
 
-function updateChart(temp, humidity) {
-  const ctx = document.getElementById('chartCanvas').getContext('2d');
-  if (envChart) envChart.destroy();
+function renderChart(sensorData) {
+  const ctx = document.getElementById("sensorChart").getContext("2d");
+  if (sensorChart) sensorChart.destroy();
 
-  envChart = new Chart(ctx, {
-    type: 'bar',
+  sensorChart = new Chart(ctx, {
+    type: "line",
     data: {
-      labels: ['Suhu (°C)', 'Kelembapan (%)'],
+      labels: ["CO₂", "PM2.5", "PM10", "VOC", "O₃"],
       datasets: [{
-        label: 'Kondisi Lingkungan',
-        data: [temp, humidity],
-        backgroundColor: ['#00b4d8', '#90e0ef'],
-        borderRadius: 10
+        label: "Kualitas Udara",
+        data: sensorData,
+        borderColor: "#0078d7",
+        tension: 0.3,
+        fill: false
       }]
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, max: 100 },
-        x: { grid: { display: false } }
-      }
+      scales: { y: { beginAtZero: true } }
     }
   });
 }

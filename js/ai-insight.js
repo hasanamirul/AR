@@ -1,19 +1,5 @@
-function getAIInsight(temp, humidity, air) {
-  const beep = document.getElementById("alertSound");
-  let msg = "";
-
-  if (temp > 32) {
-    msg = "⚠️ Suhu tinggi! Hindari aktivitas berat di luar ruangan.";
-    beep.play();
-  } else if (temp < 20) {
-    msg = "🌡️ Cuaca dingin, jaga suhu tubuhmu.";
-  } else if (air.includes("hujan")) {
-    msg = "☔ Hujan terdeteksi, bawa payung ya!";
-  } else if (humidity > 80) {
-    msg = "💧 Kelembapan tinggi, jaga ventilasi ruangan.";
-  } else {
-    msg = "✅ Lingkungan dalam kondisi ideal dan nyaman.";
-  }
-
-  return msg;
+function getAIInsight(temp, airQuality) {
+  if (temp > 30) return "🌞 Suhu cukup tinggi hari ini. Tetap terhidrasi dan hindari aktivitas berat di luar ruangan.";
+  if (airQuality > 100) return "🌫️ Kualitas udara kurang baik. Disarankan memakai masker jika keluar rumah.";
+  return "🌿 Kondisi lingkungan stabil. Nikmati hari Anda!";
 }
