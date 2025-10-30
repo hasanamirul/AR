@@ -1,7 +1,7 @@
-# Blender 4.3.0 MTL File: 'weather-icon-002.blend'
+# Blender 4.3.0 MTL File: 'cloud.blend'
 # www.blender.org
 
-newmtl weather-icon-002
+newmtl cloud.mtl
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000

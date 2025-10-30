@@ -1,6 +1,6 @@
 # Blender 4.3.0
 # www.blender.org
-mtllib weather-icon-002.mtl
+mtllib cloud.mtl
 o weather
 v 1.051739 0.591392 -0.827909
 v 0.684155 0.459395 -0.959880
