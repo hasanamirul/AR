@@ -3,86 +3,174 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Environment AR View</title>
+  <title>Weather AR Scanner</title>
 
-  <!-- Import tag <model-viewer> -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+  <!-- Three.js + GLTF Loader -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to bottom right, #e9f3ff, #d9e7ff);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    header {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: #007bff;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .viewer-container {
-      flex: 1;
+    body, html {
       width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+    }
+
+    #camera-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    #three-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #scan-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+      color: #fff;
+      z-index: 3;
+      font-size: 1.2rem;
+      animation: fadeOut 2s ease forwards;
+      animation-delay: 3s;
     }
 
-    model-viewer {
-      width: 90%;
-      height: 80%;
-      border-radius: 15px;
-      background-color: #f1f5ff;
-      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    @media (max-width: 768px) {
-      model-viewer {
-        width: 100%;
-        height: 80%;
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
       }
+    }
+
+    .scan-line {
+      width: 70%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ffff, transparent);
+      animation: scanMove 3s linear infinite;
+    }
+
+    @keyframes scanMove {
+      0% { transform: translateY(-100px); opacity: 0; }
+      30% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateY(100px); opacity: 0; }
+    }
+
+    #btnStart {
+      position: fixed;
+      bottom: 30px;
+      background: #00bfff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      z-index: 4;
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(0, 191, 255, 0.5);
     }
   </style>
 </head>
 
 <body>
-  <header>🌤️ Smart Environment AR View</header>
+  <video id="camera-bg" autoplay playsinline muted></video>
+  <canvas id="three-canvas"></canvas>
 
-  <div class="viewer-container">
-    <!-- Model Viewer 3D + AR -->
-    <model-viewer
-      src="assets/models/icon.glb"
-      alt="3D Weather Model"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      camera-controls
-      auto-rotate
-      rotation-per-second="30deg"
-      shadow-intensity="1"
-      exposure="1.2"
-      environment-image="neutral"
-      poster="assets/images/loading.png"
-      loading="eager"
-    >
-    </model-viewer>
+  <div id="scan-overlay">
+    <div class="scan-line"></div>
+    <p>🔍 Scanning environment...</p>
   </div>
 
-  <footer>
-    © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
-  </footer>
+  <button id="btnStart">Start AR Scan</button>
+
+  <script>
+    const video = document.getElementById('camera-bg');
+    const canvas = document.getElementById('three-canvas');
+    const btnStart = document.getElementById('btnStart');
+
+    let scene, camera, renderer, model;
+
+    btnStart.addEventListener('click', async () => {
+      btnStart.style.display = 'none';
+      document.getElementById('scan-overlay').style.display = 'flex';
+
+      // Aktifkan kamera
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = stream;
+      } catch (err) {
+        alert("Gagal mengakses kamera: " + err);
+        return;
+      }
+
+      initAR();
+    });
+
+    function initAR() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 2;
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(2, 2, 2);
+      scene.add(light);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+      const loader = new THREE.GLTFLoader();
+      loader.load('assets/models/icons.glb', (gltf) => {
+        model = gltf.scene;
+        model.scale.set(0.7, 0.7, 0.7);
+        model.position.set(0, -0.2, 0);
+        scene.add(model);
+        animate();
+      }, undefined, (error) => {
+        console.error('Gagal memuat model:', error);
+      });
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (model) {
+        model.rotation.y += 0.01;
+        model.position.y = 0.2 * Math.sin(Date.now() * 0.002);
+      }
+      renderer.render(scene, camera);
+    }
+  </script>
 </body>
 </html>
