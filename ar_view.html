@@ -1,49 +1,106 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Environment Monitor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR View | Smart Environment Monitor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/OBJLoader.js"></script>
 </head>
-
 <body>
   <header>
-    <h1>🌤️ Smart Environment Monitor</h1>
+    <h1>🌤️ Smart Environment AR View</h1>
     <button id="btnCamera">Aktifkan Kamera AR</button>
   </header>
 
-  <main>
-    <div class="card" id="weather-card">
-      <h2>🌡️ Cuaca</h2>
-      <p id="temp">Mendeteksi...</p>
-      <p id="condition">Loading...</p>
-    </div>
-
-    <div class="card" id="sensor-card">
-      <h2>🌫️ Sensor Lingkungan</h2>
-      <p id="air-quality">Mendeteksi...</p>
-      <div id="chartContainer" class="chart-container">
-        <canvas id="sensorChart"></canvas>
-      </div>
-    </div>
-
-    <div class="card" id="ai-card">
-      <h2>🤖 Insight AI</h2>
-      <p id="ai-insight">Analisis otomatis akan muncul di sini...</p>
-    </div>
-  </main>
+  <section id="ar-section" class="hidden">
+    <div id="camera-container"></div>
+    <div class="scan-line"></div>
+    <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
+  </section>
 
   <footer>
     © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
   </footer>
 
-  <!-- Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/OBJLoader.js"></script>
+  <script>
+    document.getElementById("btnCamera").addEventListener("click", async () => {
+      const arSection = document.getElementById("ar-section");
+      arSection.classList.remove("hidden");
 
-  <!-- Custom scripts -->
-  <script src="js/ar-dummy.js"></script>
+      // Siapkan kamera video
+      const videoContainer = document.getElementById("camera-container");
+      videoContainer.innerHTML = '';
+      const video = document.createElement("video");
+      video.autoplay = true;
+      video.playsInline = true;
+      videoContainer.appendChild(video);
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+      } catch(err) {
+        alert("Gagal akses kamera: " + err);
+        return;
+      }
+
+      // Setup Three.js
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, videoContainer.clientWidth / videoContainer.clientHeight, 0.1, 1000);
+      camera.position.z = 2;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(videoContainer.clientWidth, videoContainer.clientHeight);
+      renderer.domElement.style.position = "absolute";
+      renderer.domElement.style.top = 0;
+      renderer.domElement.style.left = 0;
+      videoContainer.appendChild(renderer.domElement);
+
+      // Lampu
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+      dirLight.position.set(1, 1, 1);
+      scene.add(dirLight);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+      // Tambahkan plane video agar video tampil di background AR
+      const videoTexture = new THREE.VideoTexture(video);
+      const videoGeometry = new THREE.PlaneGeometry(4, 3);
+      const videoMaterial = new THREE.MeshBasicMaterial({ map: videoTexture });
+      const videoMesh = new THREE.Mesh(videoGeometry, videoMaterial);
+      videoMesh.position.z = -2;
+      scene.add(videoMesh);
+
+      // Load model OBJ
+      const loader = new THREE.OBJLoader();
+      loader.load('assets/models/cloud.obj', (obj) => {
+        obj.scale.set(0.5, 0.5, 0.5);
+        obj.position.set(0, 0, 0);
+        scene.add(obj);
+
+        // Animasi rotasi model
+        function animate() {
+          requestAnimationFrame(animate);
+          obj.rotation.y += 0.01;
+          obj.position.y = 0.2 * Math.sin(Date.now() * 0.002);
+          renderer.render(scene, camera);
+        }
+        animate();
+      }, 
+      (xhr) => {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+      }, 
+      (error) => {
+        console.error('Gagal load OBJ:', error);
+      });
+
+      // Responsif
+      window.addEventListener("resize", () => {
+        camera.aspect = videoContainer.clientWidth / videoContainer.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(videoContainer.clientWidth, videoContainer.clientHeight);
+      });
+    });
+  </script>
 </body>
-
 </html>
