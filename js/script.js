@@ -1,24 +1,35 @@
-(async function () {
-  const weatherData = await getWeatherData();
+import { dummyData } from './dummy-data.js';
+import { createChart, pushData } from './chart.js';
 
-  const suhu = weatherData.main.temp;
-  const kondisi = weatherData.weather[0].description;
-  const kualitasUdara = Math.floor(Math.random() * 150); // simulasi sensor
+const chart = createChart();
 
-  document.getElementById("suhu").innerText = `Suhu: ${suhu.toFixed(1)}°C`;
-  document.getElementById("kondisi").innerText = `Kondisi: ${kondisi}`;
-  document.getElementById("aqi").innerText = `Indeks Kualitas Udara: ${kualitasUdara}`;
+// Update UI when dummy data changes
+function onSensorUpdate(data) {
+  // Update cards
+  const suhuEl = document.getElementById('suhu');
+  const kondisiEl = document.getElementById('kondisi');
+  const aqiEl = document.getElementById('aqi');
+  const humEl = document.getElementById('humidity');
+  const aiEl = document.getElementById('ai-insight');
 
-  // Chart
-  renderChart([90, 70, 60, 80, 100]);
+  if (suhuEl) suhuEl.textContent = `${data.temperature.toFixed(1)}°C`;
+  if (kondisiEl) kondisiEl.textContent = data.weather;
+  if (aqiEl) aqiEl.textContent = `AQI: ${Math.round(data.aqi)}`;
+  if (humEl) humEl.textContent = `Kelembapan: ${Math.round(data.humidity)}%`;
 
-  // Insight AI
-  const insight = getAIInsight(suhu, kualitasUdara);
-  document.getElementById("ai-insight").innerText = insight;
+  // Simple AI insight
+  let insight = '';
+  if (data.temperature > 30) insight = 'Suhu tinggi — hindari aktivitas fisik berat.';
+  else if (data.temperature < 23) insight = 'Suhu rendah — pertimbangkan pakaian hangat.';
+  else insight = 'Suhu nyaman untuk beraktivitas.';
+  if (data.aqi > 100) insight += ' Kualitas udara kurang baik, gunakan masker.';
+  if (aiEl) aiEl.textContent = insight;
 
-  // Audio jika kondisi buruk
-  if (suhu > 30 || kualitasUdara > 100) {
-    const beep = new Audio("assets/beep.mp3");
-    beep.play();
-  }
-})();
+  // Update chart
+  pushData(chart, { temperature: parseFloat(data.temperature.toFixed(1)), aqi: Math.round(data.aqi) });
+}
+
+// Subscribe to dummy data generator
+dummyData.subscribe(onSensorUpdate);
+
+// Export nothing; script runs automatically when imported as module in index.html

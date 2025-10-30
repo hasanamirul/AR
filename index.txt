@@ -32,7 +32,7 @@
     .weather-label {
       position: absolute;
       top: 20%;
-      left: 30%;
+      left: 50%;
       transform: translateX(-50%);
       background: rgba(255, 255, 255, 0.9);
       padding: 8px 15px;
@@ -59,27 +59,10 @@
       border-radius: 15px;
     }
 
-    /* Card helpers */
-    .card-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-left: 20%;
-      margin-bottom: 8px;
-    }
-
-    .card-row img {
-      display: block;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.8);
-      padding: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
-
     model-viewer {
       position: absolute;
-      top: 40%;
-      left: 30%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
       width: 120px;
       height: 120px;
@@ -156,25 +139,6 @@
         height: 450px;
       }
     }
-
-    /* Animations */
-    .fade-in {
-      animation: fadeIn 400ms ease forwards;
-    }
-
-    .zoom-in {
-      animation: zoomIn 420ms cubic-bezier(.2,.9,.2,1) forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes zoomIn {
-      from { opacity: 0; transform: scale(0.85) translateY(6px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
   </style>
 </head>
 
@@ -187,25 +151,14 @@
   <main>
     <div class="card" id="weather-card">
       <h2>🌡️ Cuaca Saat Ini</h2>
-      <div class="card-row">
-        <img src="assets/icons/TEMPT.png" alt="temp" width="36" height="36" />
-        <div>
-          <p id="lokasi">Kota Semarang</p>
-          <p id="suhu">Memuat suhu...</p>
-        </div>
-      </div>
+      <p id="lokasi">Kota Semarang</p>
+      <p id="suhu">Memuat suhu...</p>
       <p id="kondisi">Mendeteksi kondisi...</p>
     </div>
 
     <div class="card" id="sensor-card">
-      <h2>🌫️ Kualitas Udara & Sensor</h2>
-      <div class="card-row">
-        <img src="assets/icons/AQI.png" alt="aqi" width="36" height="36" />
-        <div>
-          <p id="aqi">Mengukur kualitas udara...</p>
-          <p id="humidity">Kelembapan: -- %</p>
-        </div>
-      </div>
+      <h2>🌫️ Kualitas Udara</h2>
+      <p id="aqi">Mengukur kualitas udara...</p>
       <div class="chart-container">
         <canvas id="sensorChart"></canvas>
       </div>
@@ -296,19 +249,11 @@
           mv.setAttribute('camera-controls', '');
           // Make sure auto-rotate is disabled so user controls rotation
           mv.removeAttribute('auto-rotate');
-          // Add entrance animation
-          mv.classList.remove('zoom-in');
-          // small delay to allow display change
-          requestAnimationFrame(() => mv.classList.add('zoom-in'));
           mv.addEventListener('load', () => console.log('3D model loaded'));
         }
 
         // Show weather label and update it immediately and periodically
-        if (weatherLabel) {
-          weatherLabel.style.display = 'block';
-          weatherLabel.classList.remove('fade-in');
-          requestAnimationFrame(() => weatherLabel.classList.add('fade-in'));
-        }
+        if (weatherLabel) weatherLabel.style.display = 'block';
         updateWeatherLabel();
         setInterval(updateWeatherLabel, 3000);
 
