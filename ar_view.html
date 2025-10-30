@@ -1,120 +1,96 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Environment AR View</title>
-  <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Three.js & Loaders -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/OBJLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/MTLLoader.js"></script>
+  <!-- A-Frame dan AR.js -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar-nft.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #f9fbff, #d9e7ff);
+    }
+
+    header {
+      text-align: center;
+      padding: 15px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #007bff;
+    }
+
+    .container {
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    #startButton {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #startButton:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: gray;
+      padding: 15px;
+    }
+  </style>
 </head>
 
 <body>
-  <header>
-    <h1>🌤️ Smart Environment AR View</h1>
-    <button id="btnCamera">Aktifkan Kamera AR</button>
-  </header>
+  <header>🌤️ Smart Environment AR View</header>
 
-  <section id="ar-section" class="hidden">
-    <div id="camera-container"></div>
-    <div class="scan-line"></div>
-    <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
-  </section>
+  <div class="container">
+    <button id="startButton">Aktifkan Kamera AR</button>
+  </div>
 
-  <footer>
-    © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
-  </footer>
+  <!-- Scene AR -->
+  <a-scene
+    embedded
+    arjs="sourceType: webcam; debugUIEnabled: false;"
+    vr-mode-ui="enabled: false"
+    renderer="antialias: true; alpha: true"
+    style="display: none;"
+    id="arScene"
+  >
+    <!-- Tambahkan model GLB -->
+    <a-entity
+      gltf-model="assets/models/icon.glb"
+      position="0 0 -2"
+      scale="1 1 1"
+      rotation="0 180 0"
+      animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+    ></a-entity>
+
+    <a-camera position="0 0 0" look-controls></a-camera>
+  </a-scene>
+
+  <footer>© 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang</footer>
 
   <script>
-    document.getElementById("btnCamera").addEventListener("click", async () => {
-      const arSection = document.getElementById("ar-section");
-      arSection.classList.remove("hidden");
+    const startButton = document.getElementById("startButton");
+    const arScene = document.getElementById("arScene");
 
-      const videoContainer = document.getElementById("camera-container");
-      videoContainer.innerHTML = "";
-
-      // ===== 1️⃣ AKTIFKAN KAMERA =====
-      const video = document.createElement("video");
-      video.autoplay = true;
-      video.playsInline = true;
-      videoContainer.appendChild(video);
-
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        video.srcObject = stream;
-      } catch (err) {
-        alert("Gagal mengakses kamera: " + err);
-        return;
-      }
-
-      // ===== 2️⃣ SETUP THREE.JS =====
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, videoContainer.clientWidth / videoContainer.clientHeight, 0.1, 1000);
-      camera.position.z = 3;
-
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(videoContainer.clientWidth, videoContainer.clientHeight);
-      renderer.domElement.style.position = "absolute";
-      renderer.domElement.style.top = 0;
-      renderer.domElement.style.left = 0;
-      videoContainer.appendChild(renderer.domElement);
-
-      // ===== 3️⃣ LAMPU =====
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-      const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-      dirLight.position.set(1, 1, 1);
-      scene.add(ambientLight, dirLight);
-
-      // ===== 4️⃣ BACKGROUND KAMERA =====
-      const videoTexture = new THREE.VideoTexture(video);
-      const videoMaterial = new THREE.MeshBasicMaterial({ map: videoTexture });
-      const videoGeometry = new THREE.PlaneGeometry(4, 3);
-      const videoMesh = new THREE.Mesh(videoGeometry, videoMaterial);
-      videoMesh.position.z = -3;
-      scene.add(videoMesh);
-
-      // ===== 5️⃣ LOAD MODEL OBJ + MTL =====
-      const objPath = "assets/models/cloud.obj";
-      const mtlPath = "assets/models/cloud.mtl";
-
-      const mtlLoader = new THREE.MTLLoader();
-      mtlLoader.load(mtlPath, (materials) => {
-        materials.preload();
-
-        const objLoader = new THREE.OBJLoader();
-        objLoader.setMaterials(materials);
-
-        objLoader.load(
-          objPath,
-          (object) => {
-            console.log("✅ Model loaded successfully!");
-            object.scale.set(1, 1, 1);
-            object.position.set(0, 0, 0);
-            scene.add(object);
-
-            // Animasi model
-            function animate() {
-              requestAnimationFrame(animate);
-              object.rotation.y += 0.01;
-              object.position.y = 0.2 * Math.sin(Date.now() * 0.002);
-              renderer.render(scene, camera);
-            }
-            animate();
-          },
-          (xhr) => console.log(`Loading model: ${Math.round((xhr.loaded / xhr.total) * 100)}%`),
-          (err) => console.error("❌ Gagal memuat model:", err)
-        );
-      });
-
-      // ===== 6️⃣ RESPONSIVE =====
-      window.addEventListener("resize", () => {
-        camera.aspect = videoContainer.clientWidth / videoContainer.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(videoContainer.clientWidth, videoContainer.clientHeight);
-      });
+    startButton.addEventListener("click", () => {
+      arScene.style.display = "block";
+      startButton.style.display = "none";
     });
   </script>
 </body>
