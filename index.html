@@ -3,83 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Environment Monitor AR</title>
+  <title>Smart Environment Monitor - AR Mode</title>
   <link rel="stylesheet" href="css/style.css" />
-
-  <!-- A-Frame + AR.js -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Model Viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(180deg, #eaf4ff, #ffffff);
-      margin: 0;
-      color: #222;
-    }
-
-    header {
-      background: rgba(255,255,255,0.85);
-      backdrop-filter: blur(12px);
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 5%;
-      position: sticky; top: 0; z-index: 10;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-    }
-
-    header h1 { font-size: 1.6rem; color:#0078d7; }
-    header button {
-      background: #0078d7; color:white; border:none; padding:10px 20px;
-      border-radius:10px; cursor:pointer; transition:0.3s;
-    }
-    header button:hover { background:#005fa3; transform:scale(1.05); }
-
-    main {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px;
-    }
-
-    .card {
-      background: white; border-radius: 16px; padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      max-width: 350px; flex: 1 1 300px;
-      text-align: center;
-    }
-
-    #ar-section {
-      display: none;
+    /* Container styles */
+    #camera-container {
       position: relative;
       width: 100%;
-      max-width: 400px;
-      height: 400px;
-      margin: 20px auto;
-      border-radius: 15px;
+      height: 100%;
       overflow: hidden;
-      background: #000;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
-    .scan-line {
-      position: absolute; width: 100%; height: 4px;
-      background: linear-gradient(90deg, transparent, #00aaff, transparent);
-      top: 0; animation: scanMove 2s linear infinite;
+    #camera-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .scanner-text {
-      position: absolute; bottom: 15px; width: 100%; text-align:center;
-      font-size: 0.95rem; color:#aee0ff;
+    model-viewer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      --poster-color: transparent;
+      --progress-bar-height: 0px;
+      display: none;
     }
 
-    @keyframes scanMove { 0% {top:0;} 100% {top:100%;} }
-
-    footer {
-      text-align:center;
-      padding:15px;
-      color:#555;
-      font-size:0.85rem;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      main {
+        padding: 10px;
+        grid-template-columns: 1fr;
+      }
+      
+      .card {
+        margin-bottom: 15px;
+      }
+      
+      #ar-section {
+        height: 350px;
+      }
+      
+      model-viewer {
+        width: 120px;
+        height: 120px;
+      }
     }
 
-    @media (max-width:768px) {
-      main { flex-direction:column; align-items:center; }
-      #ar-section { width:95%; height:300px; }
+    @media (min-width: 769px) {
+      main {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+      }
+      
+      #ar-section {
+        height: 450px;
+      }
     }
   </style>
 </head>
@@ -91,68 +83,106 @@
   </header>
 
   <main>
-    <div class="card">
+    <div class="card" id="weather-card">
       <h2>🌡️ Cuaca Saat Ini</h2>
       <p id="lokasi">Kota Semarang</p>
       <p id="suhu">Memuat suhu...</p>
       <p id="kondisi">Mendeteksi kondisi...</p>
     </div>
 
-    <div class="card">
+    <div class="card" id="sensor-card">
       <h2>🌫️ Kualitas Udara</h2>
       <p id="aqi">Mengukur kualitas udara...</p>
+      <div class="chart-container">
+        <canvas id="sensorChart"></canvas>
+      </div>
     </div>
 
-    <div class="card">
+    <div class="card" id="ai-card">
       <h2>🤖 Insight AI</h2>
       <p id="ai-insight">Menunggu data sensor...</p>
     </div>
   </main>
 
-  <section id="ar-section">
+  <!-- AR Section -->
+  <section id="ar-section" class="hidden">
+    <div id="camera-container">
+      <video id="camera-video" autoplay playsinline muted></video>
+      <!-- 3D Model -->
+      <model-viewer
+        src="assets/models/icon.glb"
+        camera-controls
+        shadow-intensity="1"
+        disable-zoom
+        ar
+        interaction-prompt="none"
+        touch-action="pan-y"
+      ></model-viewer>
+    </div>
     <div class="scan-line"></div>
     <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
-
-    <!-- Kamera AR -->
-    <a-scene
-      embedded
-      renderer="antialias: true; alpha: true"
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-      vr-mode-ui="enabled: false"
-    >
-      <!-- Cahaya -->
-      <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
-      <a-light type="directional" color="#ffffff" intensity="0.9" position="1 1 1"></a-light>
-
-      <!-- Model GLB -->
-      <a-entity
-        id="model3D"
-        gltf-model="assets/models/cloud.glb"
-        position="0 0 -2"
-        scale="0.5 0.5 0.5"
-        rotation="0 0 0"
-        visible="false"
-      ></a-entity>
-
-      <a-camera position="0 0 0"></a-camera>
-    </a-scene>
   </section>
 
-  <footer>© 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang</footer>
+  <footer>
+    © 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang
+  </footer>
 
   <script>
-    const btnCamera = document.getElementById("btnCamera");
-    const arSection = document.getElementById("ar-section");
-    const model3D = document.getElementById("model3D");
+    // Inisialisasi kamera dan AR
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnCamera = document.getElementById('btnCamera');
+        const arSection = document.getElementById('ar-section');
+        const video = document.getElementById('camera-video');
+        const modelViewer = document.querySelector('model-viewer');
 
-    btnCamera.addEventListener("click", () => {
-      arSection.style.display = "block";
-      btnCamera.textContent = "Memindai...";
-      setTimeout(() => {
-        model3D.setAttribute("visible", true);
-        btnCamera.textContent = "Kamera Aktif ✅";
-      }, 3000);
+        btnCamera.addEventListener('click', async () => {
+            try {
+                // Tampilkan section AR
+                arSection.classList.remove('hidden');
+                
+                // Minta izin akses kamera
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment', // Gunakan kamera belakang
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    }
+                });
+                
+                // Tampilkan video stream
+                video.srcObject = stream;
+                video.play();
+                
+                // Tampilkan model 3D setelah kamera aktif
+                setTimeout(() => {
+                    modelViewer.style.display = 'block';
+                }, 1000);
+
+            } catch (error) {
+                // Tampilkan pesan error yang lebih informatif
+                let errorMessage = 'Terjadi kesalahan saat mengakses kamera:\n\n';
+                
+                if (error.name === 'NotAllowedError') {
+                    errorMessage += 'Akses kamera ditolak. Mohon izinkan akses kamera di browser Anda.';
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage += 'Tidak dapat menemukan kamera. Pastikan perangkat Anda memiliki kamera.';
+                } else if (error.name === 'NotReadableError') {
+                    errorMessage += 'Kamera sedang digunakan oleh aplikasi lain. Tutup aplikasi tersebut dan coba lagi.';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                alert(errorMessage);
+                console.error('Error akses kamera:', error);
+                
+                // Sembunyikan section AR jika terjadi error
+                arSection.classList.add('hidden');
+            }
+        });
     });
   </script>
+
+  <!-- Import modules -->
+  <script type="module" src="js/script.js"></script>
 </body>
 </html>
