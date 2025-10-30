@@ -1,143 +1,158 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather AR View</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Environment Monitor AR</title>
+  <link rel="stylesheet" href="css/style.css" />
 
-    <!-- A-Frame + AR.js + Gesture -->
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-gesture-detector-component/dist/aframe-gesture-detector.min.js"></script>
+  <!-- A-Frame + AR.js -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
 
-    <style>
-      html, body {
-        margin: 0; padding: 0;
-        width: 100%; height: 100%;
-        overflow: hidden;
-        font-family: "Poppins", sans-serif;
-        background: linear-gradient(180deg, #eaf4ff, #ffffff);
-      }
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(180deg, #eaf4ff, #ffffff);
+      margin: 0;
+      color: #222;
+    }
 
-      header {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(12px);
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 10px 5%;
-        position: fixed; top: 0; width: 100%; z-index: 10;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.1);
-      }
+    header {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 5%;
+      position: sticky; top: 0; z-index: 10;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
 
-      header h1 { font-size: 1.4rem; color: #0078d7; }
-      header button {
-        background: #0078d7; color: white; border: none;
-        padding: 8px 16px; border-radius: 8px; cursor: pointer;
-        transition: 0.3s;
-      }
-      header button:hover { background: #005fa3; transform: scale(1.05); }
+    header h1 { font-size: 1.6rem; color:#0078d7; }
+    header button {
+      background: #0078d7; color:white; border:none; padding:10px 20px;
+      border-radius:10px; cursor:pointer; transition:0.3s;
+    }
+    header button:hover { background:#005fa3; transform:scale(1.05); }
 
-      #ar-container {
-        width: 100%; height: 100%;
-        position: fixed; top: 0; left: 0;
-        display: none;
-      }
+    main {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px;
+    }
 
-      #loading {
-        position: absolute; top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        color: white; background: rgba(0,0,0,0.6);
-        padding: 12px 24px; border-radius: 8px;
-        font-size: 1rem; display: none;
-      }
+    .card {
+      background: white; border-radius: 16px; padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 350px; flex: 1 1 300px;
+      text-align: center;
+    }
 
-      footer {
-        text-align: center; padding: 10px;
-        position: fixed; bottom: 0; width: 100%;
-        background: rgba(255,255,255,0.85);
-        font-size: 0.85rem; color: #555;
-      }
+    #ar-section {
+      display: none;
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      height: 400px;
+      margin: 20px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      background: #000;
+    }
 
-      @media (max-width: 768px) {
-        header h1 { font-size: 1.2rem; }
-        header button { padding: 6px 12px; font-size: 0.9rem; }
-      }
-    </style>
-  </head>
+    .scan-line {
+      position: absolute; width: 100%; height: 4px;
+      background: linear-gradient(90deg, transparent, #00aaff, transparent);
+      top: 0; animation: scanMove 2s linear infinite;
+    }
 
-  <body>
-    <header>
-      <h1>☁️ Weather AR Viewer</h1>
-      <button id="startAR">Mulai AR</button>
-    </header>
+    .scanner-text {
+      position: absolute; bottom: 15px; width: 100%; text-align:center;
+      font-size: 0.95rem; color:#aee0ff;
+    }
 
-    <!-- AR Container -->
-    <div id="ar-container">
-      <div id="loading">📡 Menyiapkan tampilan AR...</div>
-      <a-scene
-        embedded
-        renderer="antialias: true; alpha: true"
-        arjs="sourceType: webcam; debugUIEnabled: false;"
-        gesture-detector
-        vr-mode-ui="enabled: false"
-      >
-        <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
-        <a-light type="directional" color="#ffffff" intensity="0.8" position="0 2 1"></a-light>
+    @keyframes scanMove { 0% {top:0;} 100% {top:100%;} }
 
-        <a-entity
-          id="weatherModel"
-          gltf-model="assets/models/cloud.glb"
-          position="0 0 -1"
-          scale="0.5 0.5 0.5"
-          rotation="0 0 0"
-          visible="false"
-          gesture-handler
-        ></a-entity>
+    footer {
+      text-align:center;
+      padding:15px;
+      color:#555;
+      font-size:0.85rem;
+    }
 
-        <a-camera look-controls="enabled: false"></a-camera>
-      </a-scene>
+    @media (max-width:768px) {
+      main { flex-direction:column; align-items:center; }
+      #ar-section { width:95%; height:300px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🌤️ Smart Environment Monitor</h1>
+    <button id="btnCamera">Aktifkan Kamera AR</button>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>🌡️ Cuaca Saat Ini</h2>
+      <p id="lokasi">Kota Semarang</p>
+      <p id="suhu">Memuat suhu...</p>
+      <p id="kondisi">Mendeteksi kondisi...</p>
     </div>
 
-    <footer>
-      © 2025 Weather AR Prototype — HS Studio
-    </footer>
+    <div class="card">
+      <h2>🌫️ Kualitas Udara</h2>
+      <p id="aqi">Mengukur kualitas udara...</p>
+    </div>
 
-    <script>
-      const arContainer = document.getElementById('ar-container');
-      const startBtn = document.getElementById('startAR');
-      const loading = document.getElementById('loading');
-      const model = document.getElementById('weatherModel');
+    <div class="card">
+      <h2>🤖 Insight AI</h2>
+      <p id="ai-insight">Menunggu data sensor...</p>
+    </div>
+  </main>
 
-      startBtn.addEventListener('click', () => {
-        arContainer.style.display = 'block';
-        startBtn.style.display = 'none';
-        loading.style.display = 'block';
-      });
+  <section id="ar-section">
+    <div class="scan-line"></div>
+    <p class="scanner-text">🔍 Memindai lingkungan sekitar...</p>
 
-      model.addEventListener('model-loaded', () => {
-        loading.style.display = 'none';
-        model.setAttribute('visible', true);
-      });
+    <!-- Kamera AR -->
+    <a-scene
+      embedded
+      renderer="antialias: true; alpha: true"
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+      vr-mode-ui="enabled: false"
+    >
+      <!-- Cahaya -->
+      <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
+      <a-light type="directional" color="#ffffff" intensity="0.9" position="1 1 1"></a-light>
 
-      AFRAME.registerComponent('gesture-handler', {
-        schema: { rotationFactor: { default: 5 }, scaleFactor: { default: 1 } },
-        init: function () {
-          this.handleScale = this.handleScale.bind(this);
-          this.handleRotation = this.handleRotation.bind(this);
-          this.el.sceneEl.addEventListener('onefingermove', this.handleRotation);
-          this.el.sceneEl.addEventListener('twofingermove', this.handleScale);
-        },
-        remove: function () {
-          this.el.sceneEl.removeEventListener('onefingermove', this.handleRotation);
-          this.el.sceneEl.removeEventListener('twofingermove', this.handleScale);
-        },
-        handleRotation: function (event) {
-          this.el.object3D.rotation.y += event.detail.positionChange.x * 0.01 * this.data.rotationFactor;
-        },
-        handleScale: function (event) {
-          let scale = this.el.object3D.scale;
-          scale.multiplyScalar(1 + event.detail.spreadChange / 200 * this.data.scaleFactor);
-        }
-      });
-    </script>
-  </body>
+      <!-- Model GLB -->
+      <a-entity
+        id="model3D"
+        gltf-model="assets/models/cloud.glb"
+        position="0 0 -2"
+        scale="0.5 0.5 0.5"
+        rotation="0 0 0"
+        visible="false"
+      ></a-entity>
+
+      <a-camera position="0 0 0"></a-camera>
+    </a-scene>
+  </section>
+
+  <footer>© 2025 Smart Environment Monitor | Universitas Wahid Hasyim Semarang</footer>
+
+  <script>
+    const btnCamera = document.getElementById("btnCamera");
+    const arSection = document.getElementById("ar-section");
+    const model3D = document.getElementById("model3D");
+
+    btnCamera.addEventListener("click", () => {
+      arSection.style.display = "block";
+      btnCamera.textContent = "Memindai...";
+      setTimeout(() => {
+        model3D.setAttribute("visible", true);
+        btnCamera.textContent = "Kamera Aktif ✅";
+      }, 3000);
+    });
+  </script>
+</body>
 </html>
